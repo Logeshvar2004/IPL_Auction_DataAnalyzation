@@ -1,5 +1,9 @@
-# data_analyzation using pandas: 
+Data Analyzation
 
-I have done a data analyzation using pandas by downloading a sample dataset in google. 
+A basic data analyzation of IPL auction of past 5 years.
+
+Tools:
+1) Numpy
+2) Pandas
 
 I've given that dataset for your reference.
