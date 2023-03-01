@@ -1,82 +1,37 @@
 import pandas as pd
+import numpy as np
 
+data = pd.read_csv(r'D:\Logesh\Coding\python\Udemy\Pandas\IPL_Sold_players_2013_23.csv')
 
-def calculate_demographic_data(print_data=True):
-    # Read data from file
-    df = pd.read_csv("demo_data.csv")
-  
-    # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
-    race_count = df['race'].value_counts()
+print(round(data['Price'].mean(), 2))
 
-    # What is the average age of men?
-    average_age_men = df[df['sex']=='Male']['age'].mean().round(1)
+print(data[data['Price']==data['Price'].max()])
+print(data.loc[data['Price'].idxmax()])
+print(data.loc[data['Price'].idxmin()])
+print(data[data['Price']==data['Price'].min()])
 
-    # What is the percentage of people who have a Bachelor's degree?
-    count= len(df[df['education']=='Bachelors'])
-    percentage_bachelors = round(count/len(df)*100 ,1)
-    
+#Access a column using GroupBy
+print(data.groupby('Season').mean())
 
-    # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
-    # What percentage of people without advanced education make more than 50K?
+print('Top 5 Most appeared player: ')
+print(data['Name'].value_counts().head(5))
 
-    higher_education = df[df['education'].isin(['Bachelors','Doctorate' ,'Masters'])]
-    lower_education = df[~df['education'].isin(['Bachelors','Doctorate' ,'Masters'])]
+print('Players with only one appearences : ')
+print(data['Name'].unique())
+print('Total : ',data['Name'].nunique())
 
-    # percentage with salary >50K
-    per_h=len(higher_education[higher_education.salary==">50K"])
-    per_l=len(lower_education[lower_education.salary==">50K"])
-    
-    higher_education_rich = round(per_h/len(higher_education)*100, 1)
-    lower_education_rich = round(per_l/len(lower_education)*100 ,1)
+print('Total No of players in 2023: ',sum(data[data['Season']==2023].value_counts()==1))
 
-    # What is the minimum number of hours a person works per week (hours-per-week feature)?
-    min_work_hours = df["hours-per-week"].min()
+#Printing Chennai team players
 
-    # What percentage of the people who work the minimum number of hours per week have a salary of >50K?
-    num_min_workers = df[df["hours-per-week"]==min_work_hours]
+n= input('Enter Team to search: ')
+def search(n,s):
+    if n.lower() in s.lower().split():
+        return True
+    else:
+        return False
 
-    rich_percentage = round(len(num_min_workers[num_min_workers.salary==">50K"])/len(num_min_workers)*100 ,1)
-
-    # What country has the highest percentage of people that earn >50K?
-    country_count=df["native-country"].value_counts()
-    country_rich_count=df[df["salary"]==">50K"]["native-country"].value_counts()
-  
-    highest_earning_country = (country_rich_count/country_count *100).idxmax() 
-    highest_earning_country_percentage = round(country_rich_count/country_count *100,1).max() 
-
-    # Identify the most popular occupation for those who earn >50K in India.
-    people=df[df["native-country"]=="India"]
-  
-    oc_count=people["occupation"].value_counts()
-  
-    top_IN_occupation = oc_count.idxmax()
-  
-    # DO NOT MODIFY BELOW THIS LINE
-
-    if print_data:
-        print("Number of each race:\n", race_count) 
-        print("Average age of men:", average_age_men)
-        print(f"Percentage with Bachelors degrees: {percentage_bachelors}%")
-        print(f"Percentage with higher education that earn >50K: {higher_education_rich}%")
-        print(f"Percentage without higher education that earn >50K: {lower_education_rich}%")
-        print(f"Min work time: {min_work_hours} hours/week")
-        print(f"Percentage of rich among those who work fewest hours: {rich_percentage}%")
-        print("Country with highest percentage of rich:", highest_earning_country)
-        print(f"Highest percentage of rich people in country: {highest_earning_country_percentage}%")
-        print("Top occupations in India:", top_IN_occupation)
-
-    return {
-        'race_count': race_count,
-        'average_age_men': average_age_men,
-        'percentage_bachelors': percentage_bachelors,
-        'higher_education_rich': higher_education_rich,
-        'lower_education_rich': lower_education_rich,
-        'min_work_hours': min_work_hours,
-        'rich_percentage': rich_percentage,
-        'highest_earning_country': highest_earning_country,
-        'highest_earning_country_percentage':
-        highest_earning_country_percentage,
-        'top_IN_occupation': top_IN_occupation
-    }
-
-calculate_demographic_data()
+print(data[data['Team'].apply(lambda x: search(n,x))])
+print('Total: ',sum(data['Team'].apply(lambda x: search(n,x))))
+c=input('Enter category: ')
+print(data[data['Type'].apply(lambda x: search(c,x))]['Name'])
