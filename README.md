@@ -1,6 +1,6 @@
-Data Analyzation
+#Data Analytics
 
-A basic data analyzation of IPL auction of past 10 years.
+This project provides a comprehensive review of IPL auctions over the last decade. Through this analysis, we can obtain valuable insights into the players involved.
 
 Tools:
 1) Numpy
